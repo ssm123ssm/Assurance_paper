@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Precision assurance explainer</title>
+<meta name="description" content="An animation of precision assurance for a binomial study, and how it can fall as the sample size grows.">
+<style>
+  :root {
+    --bg: #ffffff;
+    --ink: #1f2328;
+    --muted: #5f6670;
+    --rule: #d8dbe0;
+    --link: #0b5cad;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16181c;
+      --ink: #e6e8eb;
+      --muted: #a0a7b1;
+      --rule: #343841;
+      --link: #7db4f0;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 18px/1.6 "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  }
+  main { max-width: 900px; margin: 0 auto; padding: 40px 16px 56px; }
+  h1 { font-size: 1.6rem; font-weight: 600; line-height: 1.25; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 24px; }
+  video { display: block; width: 100%; height: auto; border: 1px solid var(--rule); background: #fff; }
+  p { margin: 20px 0 0; }
+  footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 0.9rem; }
+  a { color: var(--link); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Precision assurance can fall as a study grows</h1>
+  <p class="sub">Companion animation for Section 2 of the paper</p>
+
+  <video src="../videos/section2_assurance.mp4" poster="../videos/section2_assurance_poster.png"
+         controls playsinline preload="metadata">
+    Your browser cannot play this video. <a href="../videos/section2_assurance.mp4">Download it</a> instead.
+  </video>
+
+  <p>Precision assurance is the predictive probability that a study's posterior interval is no wider than a target width. This animation builds it for a binomial study with a Beta(2.5, 11) prior, 90% equal-tailed intervals and a target width of 0.29, and shows that it can fall as the sample size grows. At a required level of 0.90 the first-crossing rule selects 11 observations, while the sustained rule, which requires the level at every larger size, selects 13.</p>
+
+  <footer>
+    Manathunga, Heath and Russell. Nonmonotone precision assurance in Bayesian sample size determination for binomial proportions.
+    <a href="https://github.com/ssm123ssm/Assurance_paper">Source</a>
+  </footer>
+</main>
+</body>
+</html>
