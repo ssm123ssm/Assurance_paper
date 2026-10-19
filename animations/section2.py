@@ -1,10 +1,3 @@
-"""Section 2 of the paper. Passing set, precision assurance, and the first-crossing and sustained rules.
-
-The example is the one in Figure 1, a Beta(2.5, 11) prior, 90% equal-tailed intervals, target width 0.29 and
-required level q = 0.90. Render from this folder with ./render.sh, or directly,
-    manim -qh --disable_caching section2.py Section2Assurance
-"""
-
 import numpy as np
 from manim import *
 
@@ -12,17 +5,15 @@ from model import EXAMPLE as R, TOL
 from stack_view import StackView, Tween, ViewScene
 from style import *
 
-N = R.n_max                 # rows n = 0..N
-ROW = 11                    # the single study size of part 1, the first crossing
-COL_X = -2.2                # count coordinate where each row's passing mass stacks
+N = R.n_max
+ROW = 11
+COL_X = -2.2
 
-# Part 1 layout. The row is a flat bar chart with the width panel above it, on a shared count axis.
 FLAT = dict(psi=0.0, elev=0.0, ux=0.5, ud=0.2, hscale=8.0, ox=-0.3, oy=-2.75)
 W_LO, W_HI, W_Y0, W_Y1 = 0.15, 0.35, 0.35, 2.55
 AXIS_X = -5.9
 STRIP_X, STRIP_Y, STRIP_LEN, STRIP_H = 2.1, -1.25, 4.0, 0.36
 
-# Part 2 camera, looking obliquely at the (count, n) floor.
 OBLIQUE = dict(psi=32 * DEGREES, elev=26 * DEGREES, ux=0.3, ud=0.26, hscale=2.4, ox=0.0, oy=-1.1)
 
 
@@ -44,7 +35,6 @@ def curve_axes():
 
 
 def sustained_steps(ax, s):
-    """Sustained assurance as steps, for the part of the n axis right of s. Green at or above q."""
     g = VGroup()
     for n in range(N, -1, -1):
         x0, x1 = max(n - 0.5, s, 0), min(n + 0.5, N)
@@ -79,7 +69,6 @@ class Section2Assurance(ViewScene):
         self.all_sizes(view, x, d, m, ax)
         self.rules(ax, labels, numbers)
 
-    # ------------------------------------------------------------------ part 1
     def one_size(self, view, x, d, m, final):
         row = d == ROW
         bar_x = {y: view.point(y, ROW)[0] for y in range(ROW + 1)}
@@ -151,7 +140,6 @@ class Section2Assurance(ViewScene):
 
         self.part1 = VGroup(counts, m_lab, w_axis, dots, target, t_lab, frame, q_mark, s_lab, segments)
 
-    # ------------------------------------------------------------------ part 2
     def all_sizes(self, view, x, d, m, ax):
         self.caption(r"Repeat at every sample size from 0 to 20")
         self.play(FadeOut(self.part1), run_time=0.8)
@@ -182,7 +170,6 @@ class Section2Assurance(ViewScene):
                         count_alpha=0.0, depth_alpha=0.0), run_time=3.0)
         self.wait(1.0)
 
-    # ------------------------------------------------------------------ part 3
     def rules(self, ax, labels, numbers):
         view = self.views[0]
         pts = [ax.c2p(n, R.A[n]) for n in range(N + 1)]

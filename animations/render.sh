@@ -1,8 +1,4 @@
 #!/usr/bin/env bash
-# Render an animation and copy a web-ready MP4 and poster into ../videos.
-#   ./render.sh            Section 2 at 1080p60
-#   ./render.sh -ql        draft at 480p15, left in media/
-# Set MANIM to a manim executable if it is not on PATH.
 set -euo pipefail
 cd "$(dirname "$0")"
 MANIM=${MANIM:-manim}

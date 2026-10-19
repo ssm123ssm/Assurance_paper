@@ -1,14 +1,3 @@
-"""3D bars over (count, sample size), drawn with their own orthographic camera.
-
-The view holds its state, a camera plus one entry per bar, and redraws every frame, so animate it with Tween and
-never with ordinary animations.
-
-World axes. Count y runs along x, sample size n runs along d, and bar height is predictive mass times hscale.
-The camera yaws by psi about the vertical and then tilts down by elev. psi = 0 and elev = 0 look square at the
-count axis, so a single row draws as a flat bar chart. psi = 90 degrees and elev = 0 look along the count axis,
-so rows line up side by side against n.
-"""
-
 import numpy as np
 from manim import *
 
@@ -20,28 +9,27 @@ def rgb(color):
 
 
 class StackView(VGroup):
-    EPS = 0.004             # bars with less mass than this fade out
+    EPS = 0.004
 
     def __init__(self, x, d, mass, colors, x_lim, d_lim, centre, x_ticks, d_ticks, fx=0.74, fd=0.62,
                  x_label="y", d_label="n", **camera):
         super().__init__()
-        self.FX, self.FD = fx, fd                        # bar footprint along the count and depth axes
+        self.FX, self.FD = fx, fd
         self.k = len(x)
         self.bx = np.array(x, dtype=float)
         self.bd = np.array(d, dtype=float)
-        self.bz = np.zeros(self.k)                       # base of each bar, in mass units
-        self.bm = np.array(mass, dtype=float)            # height of each bar, in mass units
+        self.bz = np.zeros(self.k)
+        self.bm = np.array(mass, dtype=float)
         self.col = np.array([rgb(c) for c in colors])
         self.op = np.ones(self.k)
         self.x_lim, self.d_lim, self.centre = np.array(x_lim, float), np.array(d_lim, float), centre
         self.x_ticks, self.d_ticks = x_ticks, d_ticks
 
-        # camera, screen offset of the floor centre, and the opacity of the floor and its two axes
         self.psi, self.elev = 0.0, 0.0
         self.ux, self.ud, self.hscale = 0.3, 0.2, 2.0
         self.ox, self.oy = 0.0, 0.0
         self.floor_alpha, self.count_alpha, self.depth_alpha = 1.0, 1.0, 0.0
-        self.num_alpha = 1.0                             # count numbers, separate from the count axis
+        self.num_alpha = 1.0
         for key, value in camera.items():
             setattr(self, key, value)
 
@@ -55,7 +43,6 @@ class StackView(VGroup):
         self.add_updater(lambda m: m.redraw())
         self.redraw()
 
-    # geometry
     def view_coords(self, x, d, z):
         x, d, z = np.broadcast_arrays(*[np.asarray(v, dtype=float) for v in (x, d, z)])
         X = (x - self.centre[0]) * self.ux
@@ -63,7 +50,7 @@ class StackView(VGroup):
         Z = z * self.hscale
         cp, sp = np.cos(self.psi), np.sin(self.psi)
         sx = X * cp + Y * sp
-        far = -X * sp + Y * cp                          # distance into the screen along the floor
+        far = -X * sp + Y * cp
         sy = Z * np.cos(self.elev) + far * np.sin(self.elev)
         return sx, sy, far
 
@@ -72,7 +59,6 @@ class StackView(VGroup):
         return np.stack([self.ox + sx, self.oy + sy, np.zeros_like(sx)], -1)
 
     def faces(self, i):
-        """Top, front and side faces of bar i as projected corner lists."""
         hx, hd = self.FX / 2, self.FD / 2
         x0, x1 = self.bx[i] - hx, self.bx[i] + hx
         d0, d1 = self.bd[i] - hd, self.bd[i] + hd
@@ -86,7 +72,6 @@ class StackView(VGroup):
     def shown(self, t, lim):
         return lim[0] - 1e-9 <= t <= lim[1] + 1e-9
 
-    # drawing
     def redraw(self):
         self.floor.submobjects = self.draw_floor().submobjects
         self.bars.submobjects = self.draw_bars().submobjects
@@ -117,12 +102,12 @@ class StackView(VGroup):
 
     def draw_bars(self):
         f = float(np.clip(abs(self.psi) / (PI / 2), 0, 1))
-        shade = (lambda c: c * 0.82 + 0.18,              # top, lit
-                 lambda c: c * interpolate(1.0, 0.76, f),  # front, darker as the camera turns away
-                 lambda c: c * interpolate(0.76, 1.0, f))  # side, lighter as the camera turns to it
+        shade = (lambda c: c * 0.82 + 0.18,
+                 lambda c: c * interpolate(1.0, 0.76, f),
+                 lambda c: c * interpolate(0.76, 1.0, f))
         _, _, far = self.view_coords(self.bx, self.bd, 0)
         g = VGroup()
-        for i in np.lexsort((self.bz, -far)):            # far bars first, lower bars first in a stack
+        for i in np.lexsort((self.bz, -far)):
             op = self.op[i] * np.clip(self.bm[i] / self.EPS, 0, 1)
             if op <= 0.01:
                 continue
@@ -146,11 +131,6 @@ class StackView(VGroup):
 
 
 class Tween(Animation):
-    """Move a view's state to new values. Per-bar arrays may be staggered.
-
-    lag_key gives each bar a rank in [0, 1], and a bar starts once the animation is that rank times lag of the
-    way through. Scalars, the camera among them, always move over the whole run.
-    """
 
     def __init__(self, view, lag=0.0, lag_key=None, **targets):
         self.view, self.lag, self.lag_key, self.targets = view, lag, lag_key, targets
@@ -167,8 +147,6 @@ class Tween(Animation):
             s, e = self.start[k], self.end[k]
             if self.lag and s.ndim and s.shape[0] == self.view.k:
                 local = np.clip((alpha - self.lag * self.lag_key) / (1 - self.lag), 0, 1)
-                # otypes matters. Without it NumPy takes the output type from the first bar, and Manim's
-                # smooth returns the int 1 once that bar finishes, which rounds every other bar to 0 or 1.
                 a = np.vectorize(self.rate_func, otypes=[float])(local).reshape(-1, *([1] * (s.ndim - 1)))
             else:
                 a = self.rate_func(alpha)
@@ -177,15 +155,12 @@ class Tween(Animation):
 
 
 class ViewScene(Narrated, Scene):
-    """Caption and slots, plus the draw-order fix that state-drawn views need."""
 
     def setup(self):
         self.init_slots()
         self.views = []
 
     def get_moving_and_static_mobjects(self, animations):
-        """Keep each view but not its parts. A play fixes the flattened list when it starts, while a view
-        replaces its parts every frame, so listed parts would linger under the new ones."""
         moving, static = super().get_moving_and_static_mobjects(animations)
         parts = {id(m) for v in self.views for m in v.get_family()[1:]}
         return [m for m in moving if id(m) not in parts], static

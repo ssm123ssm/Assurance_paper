@@ -1,9 +1,3 @@
-"""Palette and caption slots for the companion animations.
-
-Pass and fail colours follow Figure 1 of the paper. Set CAPTIONS=0 in the environment to render without the
-top captions. Each caption also starts a new Manim section, so --save_sections writes one clip per caption.
-"""
-
 import os
 import re
 
@@ -14,10 +8,10 @@ CAPTIONS = os.environ.get("CAPTIONS", "1") != "0"
 BG = "#FFFFFF"
 INK = "#1F2328"
 MUTED = "#8A8F98"
-NEUTRAL = "#A7ADB5"      # predictive bars before they are classified
-PASS = "#0072B2"         # passing counts, as in Figure 1
-FAIL = "#D55E00"         # failing counts and falls in assurance
-SUS = "#1A9E77"          # sustained assurance
+NEUTRAL = "#A7ADB5"
+PASS = "#0072B2"
+FAIL = "#D55E00"
+SUS = "#1A9E77"
 
 config.background_color = BG
 for _cls in (Tex, MathTex, Text, DecimalNumber, Integer):
@@ -25,7 +19,6 @@ for _cls in (Tex, MathTex, Text, DecimalNumber, Integer):
 
 
 class Narrated:
-    """Caption at the top plus an equation slot and a note slot. Subclasses set the slot centres."""
 
     eq_center = ORIGIN
     note_center = ORIGIN
