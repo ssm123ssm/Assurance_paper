@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>A finite bound from Cantelli</title>
-<meta name="description" content="An animation of how Cantelli's inequality bounds every posterior interval width at once, giving a sample size after which assurance stays at 1.">
+<title>Two routes to a finite bound</title>
+<meta name="description" content="Two animations of how Cantelli's inequality and a sub-Gaussian bound each limit every posterior interval width at once, giving a sample size after which assurance stays at 1.">
 <style>
   :root {
     --bg: #ffffff;
@@ -31,6 +31,7 @@
   }
   main { max-width: 900px; margin: 0 auto; padding: 40px 16px 56px; }
   h1 { font-size: 1.6rem; font-weight: 600; line-height: 1.25; margin: 0 0 4px; }
+  h2 { font-size: 1.2rem; font-weight: 600; line-height: 1.3; margin: 40px 0 12px; }
   .sub { color: var(--muted); margin: 0 0 24px; }
   video { display: block; width: 100%; height: auto; border: 1px solid var(--rule); background: #fff; }
   p { margin: 20px 0 0; }
@@ -39,15 +40,26 @@
 </head>
 <body>
 <main>
-  <h1>A finite bound from Cantelli</h1>
+  <h1>Two routes to a finite bound</h1>
   <p class="sub">Section 5: Sustained guarantees and a finite bound</p>
 
+  <p>Sustained assurance looks at every larger sample size, so a finite calculation needs a point after which every count passes. Both animations reach that point for the example of Section 2 by bounding every 90% equal-tailed interval width at once.</p>
+
+  <h2>Cantelli route</h2>
   <video src="../videos/section5_cantelli.mp4" poster="../videos/section5_cantelli_poster.png"
          controls playsinline preload="metadata">
     Your browser cannot play this video. <a href="../videos/section5_cantelli.mp4">Download it</a> instead.
   </video>
 
-  <p>Sustained assurance looks at every larger sample size, so a finite calculation needs a point after which every count passes. This animation follows the Cantelli route to that point for the example of Section 2. Cantelli's inequality caps the probability beyond any point using only the posterior mean <i>&mu;</i> and standard deviation <i>&sigma;</i>. The cap falls to 5% at &radic;19 standard deviations from the mean, so every 90% equal-tailed interval fits between fences 2&radic;19&thinsp;<i>&sigma;</i> apart. At a fixed sample size every posterior has the same concentration <i>c</i>&nbsp;=&nbsp;<i>a</i>&nbsp;+&nbsp;<i>b</i>&nbsp;+&nbsp;<i>n</i>, and <i>&sigma;</i> is largest when the posterior mean is 1/2, which bounds every interval width by &radic;(19/(<i>c</i>&nbsp;+&nbsp;1)). Once that bound falls below the target width, every count passes and <i>A</i>(<i>n</i>)&nbsp;=&nbsp;1. For this example the Cantelli route certifies <i>n</i>&nbsp;&ge;&nbsp;212, while every count already passes from <i>n</i>&nbsp;=&nbsp;18. The sub-Gaussian bound used in the paper gives the smaller certificate <i>n</i>&nbsp;&ge;&nbsp;57.</p>
+  <p>Cantelli's inequality caps the probability beyond any point using only the posterior mean <i>&mu;</i> and standard deviation <i>&sigma;</i>. The cap falls to 5% at &radic;19 standard deviations from the mean, so every 90% interval fits between fences 2&radic;19&thinsp;<i>&sigma;</i> apart. At a fixed sample size every posterior has the same concentration <i>c</i>&nbsp;=&nbsp;<i>a</i>&nbsp;+&nbsp;<i>b</i>&nbsp;+&nbsp;<i>n</i>, and <i>&sigma;</i> is largest when the posterior mean is 1/2, which bounds every interval width by &radic;(19/(<i>c</i>&nbsp;+&nbsp;1)). Once that bound falls below the target width, every count passes and <i>A</i>(<i>n</i>)&nbsp;=&nbsp;1. For this example the Cantelli route certifies <i>n</i>&nbsp;&ge;&nbsp;212, while every count already passes from <i>n</i>&nbsp;=&nbsp;18.</p>
+
+  <h2>Sub-Gaussian route</h2>
+  <video src="../videos/section5_subgaussian.mp4" poster="../videos/section5_subgaussian_poster.png"
+         controls playsinline preload="metadata">
+    Your browser cannot play this video. <a href="../videos/section5_subgaussian.mp4">Download it</a> instead.
+  </video>
+
+  <p>Every beta posterior with concentration <i>c</i> is sub-Gaussian with proxy variance <i>s</i><sup>2</sup>&nbsp;=&nbsp;1/(4(<i>c</i>&nbsp;+&nbsp;1)), the variance of the posterior whose mean is 1/2. Markov's inequality gives one exponential tail bound for each value of <i>&lambda;</i>, and the best <i>&lambda;</i> at each point traces the bell e<sup>&minus;<i>d</i><sup>2</sup>/(2<i>s</i><sup>2</sup>)</sup>. The bell falls to 5% at 2.45&thinsp;<i>s</i> from the mean, so every 90% interval is at most &radic;(2&thinsp;log&thinsp;20/(<i>c</i>&nbsp;+&nbsp;1)) wide. Since <i>s</i> does not depend on the count, the fences have the same width for every count. For this example the sub-Gaussian route certifies <i>n</i>&nbsp;&ge;&nbsp;57. The paper takes the smaller of the two constants, (1&nbsp;&minus;&nbsp;<i>u</i>)/<i>u</i>&nbsp;=&nbsp;19 and 2&thinsp;log(1/<i>u</i>)&nbsp;=&nbsp;5.99, and the Cantelli constant is smaller only for credibility below about 43%.</p>
 </main>
 </body>
 </html>

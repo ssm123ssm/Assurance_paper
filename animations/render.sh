@@ -23,3 +23,6 @@ fi
 if [ "$WHICH" = "all" ] || [ "$WHICH" = "section5_cantelli" ]; then
   render section5_cantelli Section5Cantelli section5_cantelli 49.5
 fi
+if [ "$WHICH" = "all" ] || [ "$WHICH" = "section5_subgaussian" ]; then
+  render section5_subgaussian Section5SubGaussian section5_subgaussian 28.0
+fi
