@@ -20,3 +20,6 @@ fi
 if [ "$WHICH" = "all" ] || [ "$WHICH" = "section4_sequences" ]; then
   render section4_sequences Section4Sequences section4_sequences 92.5
 fi
+if [ "$WHICH" = "all" ] || [ "$WHICH" = "section5_cantelli" ]; then
+  render section5_cantelli Section5Cantelli section5_cantelli 49.5
+fi
