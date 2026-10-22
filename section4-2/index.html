@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assurance at the passing boundary</title>
+<meta name="description" content="An animation of how one more observation splits every possible sequence and moves one of them out of the passing set, so that assurance falls.">
+<style>
+  :root {
+    --bg: #ffffff;
+    --ink: #1f2328;
+    --muted: #5f6670;
+    --rule: #d8dbe0;
+    --link: #0b5cad;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16181c;
+      --ink: #e6e8eb;
+      --muted: #a0a7b1;
+      --rule: #343841;
+      --link: #7db4f0;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 18px/1.6 "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  }
+  main { max-width: 900px; margin: 0 auto; padding: 40px 16px 56px; }
+  h1 { font-size: 1.6rem; font-weight: 600; line-height: 1.25; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 24px; }
+  video { display: block; width: 100%; height: auto; border: 1px solid var(--rule); background: #fff; }
+  p { margin: 20px 0 0; }
+  a { color: var(--link); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Assurance at the passing boundary</h1>
+  <p class="sub">Section 4.2: Passing boundaries and changes in assurance</p>
+
+  <video src="../videos/section4_sequences.mp4" poster="../videos/section4_sequences_poster.png"
+         controls playsinline preload="metadata">
+    Your browser cannot play this video. <a href="../videos/section4_sequences.mp4">Download it</a> instead.
+  </video>
+
+  <p>A study of 3 observations has 8 possible sequences of successes and failures. Sequences with the same count <i>y</i> have the same predictive probability, so the bundle with count <i>y</i> has mass <i>m</i><sub>3</sub>(<i>y</i>), the binomial coefficient times the probability of one sequence. In the example of Section 2, only count 0 meets the width target at both 3 and 4 observations, so <i>A</i>(3) is the probability of FFF. A fourth observation splits each sequence into a failure child and a success child, which take the shares 1&nbsp;&minus;&nbsp;<i>p</i><sub>3</sub>(<i>y</i>) and <i>p</i><sub>3</sub>(<i>y</i>) of its probability. Sorting the 16 children by their new count moves only FFFS out of the passing set, so <i>A</i>(4)&nbsp;=&nbsp;<i>A</i>(3)&nbsp;&minus;&nbsp;<i>m</i><sub>3</sub>(0)&thinsp;<i>p</i><sub>3</sub>(0)&nbsp;=&nbsp;0.566&nbsp;&minus;&nbsp;0.086&nbsp;=&nbsp;0.480. With a fixed lower block {0,&nbsp;&hellip;,&nbsp;<i>j</i>&nbsp;&minus;&nbsp;1}, assurance loses only the success share of bundle <i>j</i>&nbsp;&minus;&nbsp;1.</p>
+</main>
+</body>
+</html>
